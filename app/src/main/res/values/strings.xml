@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Dagger2 Testing Demo</string>
+    <string name="my_words">My Words</string>
+    <string name="add_new_word">Add New Word</string>
+    <string name="new_word">New Word</string>
+    <string name="meaning">Meaning</string>
+</resources>
