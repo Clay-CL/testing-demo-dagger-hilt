@@ -7,7 +7,10 @@ import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.swipeLeft
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.MediumTest
 import com.clay.dagger2testingdemo.R
@@ -22,6 +25,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -58,7 +62,11 @@ class WordsFragmentTest {
 
         val navController = mock(NavController::class.java)
 
-        launchFragmentInHiltContainer<WordsFragment>(Bundle(), R.style.Theme_AppCompat) {
+        launchFragmentInHiltContainer<WordsFragment>(
+            Bundle(),
+            R.style.Theme_AppCompat,
+            fragmentFactory = testFragmentFactory
+        ) {
             Navigation.setViewNavController(requireView(), navController)
         }
 
@@ -90,6 +98,18 @@ class WordsFragmentTest {
 
         assertThat(testViewModel?.words?.getOrAwaitValue()).isEmpty()
 
+    }
+
+    @Test
+    fun noWords_EmptyWordsPlaceholderIsShown() = runBlockingTest {
+        var testViewModel: MainViewModel? = null
+        launchFragmentInHiltContainer<WordsFragment>(
+            fragmentFactory = testFragmentFactory
+        ) {
+            testViewModel = this.viewModel
+        }
+        assertThat(testViewModel?.words?.getOrAwaitValue()).isEmpty()
+        onView(withId(R.id.container_empty_words)).check(matches(isDisplayed()))
     }
 
 

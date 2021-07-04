@@ -36,6 +36,10 @@
             app:layout_constraintTop_toBottomOf="@id/tv_words_heading"
             tools:listitem="@layout/item_word" />
 
+        <include
+            android:id="@+id/container_empty_words"
+            layout="@layout/layout_empty_words" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -2,6 +2,7 @@ package com.clay.dagger2testingdemo.ui.words
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -20,8 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class WordsFragment constructor(
-     var viewModel: MainViewModel? = null
-): BaseFragment(R.layout.fragment_words) {
+    var viewModel: MainViewModel? = null
+) : BaseFragment(R.layout.fragment_words) {
 
     private var _binding: FragmentWordsBinding? = null
     private val binding get() = _binding!!
@@ -44,6 +45,10 @@ class WordsFragment constructor(
 
     private fun subscribeToObservers() {
         viewModel?.words?.observe(viewLifecycleOwner) {
+            with(binding) {
+                containerEmptyWords.root.isVisible = it.isEmpty()
+                rvWords.isVisible = it.isNotEmpty()
+            }
             wordsAdapter.words = it
         }
         viewModel?.insertWord?.observe(viewLifecycleOwner) {
